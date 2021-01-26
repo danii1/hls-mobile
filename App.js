@@ -10,7 +10,7 @@ import TrackPlayer, {
 
 track = {
   id: "1", // Must be a string, required
-  url: "http://192.168.1.53:8000/streams/8bc495dd387d130be25aaae097785cda.m3u8", // Load media from the network
+  url: "http://192.168.1.2:8000/streams/b14083b2c6fa4ea64e731640b54dbdb0.m3u8", // Load media from the network
 
   title: "Still Falls the Rain",
   artist: "AOA",
@@ -73,6 +73,11 @@ export default function App() {
     else TrackPlayer.play();
   };
 
+  onSeek = async () => {
+    const duration = await TrackPlayer.getDuration();
+    TrackPlayer.seekTo(duration / 2);
+  };
+
   const { position, bufferedPosition, duration } = useTrackPlayerProgress();
 
   const isPlaying = playbackState === STATE_PLAYING;
@@ -84,12 +89,8 @@ export default function App() {
         {isPlaying ? "Playing" : "Paused"}: {position}/{duration}
       </Text>
       <Text>Buffer: {bufferedPosition}</Text>
-      <Button
-        onPress={onTogglePlayback}
-        title={isPlaying ? "Pause" : "Play"}
-        // color="#841584"
-        // accessibilityLabel="Learn more about this purple button"
-      />
+      <Button onPress={onTogglePlayback} title={isPlaying ? "Pause" : "Play"} />
+      <Button onPress={onSeek} title="Seek to 50%" />
       <StatusBar style="auto" />
     </View>
   );
